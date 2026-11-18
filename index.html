@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Learning App</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { display: flex; height: 100vh; background-color: #f4f6f9; color: #333; overflow: hidden; }
+        
+        /* Sidebar Styles */
+        aside { width: 260px; background: #2c3e50; color: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; }
+        .logo { padding: 20px; background: #1a252f; font-size: 20px; font-weight: bold; text-align: center; color: #e34c26; }
+        .menu { list-style: none; padding: 10px 0; overflow-y: auto; flex-grow: 1; }
+        .menu li { padding: 12px 20px; cursor: pointer; transition: background 0.3s; font-size: 15px; border-left: 4px solid transparent; }
+        .menu li:hover, .menu li.active { background: #34495e; border-left-color: #e34c26; color: #fff; }
+
+        /* Main Content Styles */
+        main { flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; }
+        header { margin-bottom: 20px; }
+        h1 { color: #2c3e50; font-size: 24px; margin-bottom: 5px; }
+        p { line-height: 1.6; margin-bottom: 12px; font-size: 15px; color: #555; }
+        
+        .section-content { display: none; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-content.active { display: block; }
+
+        .code-box { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 6px; font-family: monospace; overflow-x: auto; margin-bottom: 15px; font-size: 14px; }
+        
+        /* Live Editor Styles */
+        textarea { width: 100%; height: 130px; background: #1e1e1e; color: #00ff88; font-family: monospace; font-size: 14px; padding: 12px; border-radius: 6px; border: none; resize: vertical; margin-bottom: 10px; }
+        button.run-btn { background: #e34c26; color: white; border: none; padding: 10px 18px; font-size: 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button.run-btn:hover { background: #c0392b; }
+        iframe { width: 100%; height: 130px; border: 1px solid #ddd; border-radius: 6px; background: white; margin-top: 10px; }
+
+        /* Quiz Styles */
+        .quiz-question { font-weight: bold; margin-bottom: 10px; }
+        .quiz-options label { display: block; background: #fdfdfd; border: 1px solid #ddd; padding: 10px; border-radius: 5px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
+        .quiz-options label:hover { background: #f1f1f1; }
+        .quiz-result { margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 5px; display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside>
+        <div class="logo">HTML Master App</div>
+        <ul class="menu">
+            <li onclick="showSection('intro', this)" class="active">1. Introduction</li>
+            <li onclick="showSection('headings', this)">2. Headings & Paragraphs</li>
+            <li onclick="showSection('editor', this)">3. Live Code Editor</li>
+            <li onclick="showSection('quiz', this)">4. Practice Quiz</li>
+        </ul>
+    </aside>
+
+    <!-- Content Area -->
+    <main>
+        <header>
+            <h1 id="pageTitle">HTML Introduction</h1>
+            <p id="pageSub">शुरुआत करते हैं बेसिक कॉन्सेप्ट्स से</p>
+        </header>
+
+        <!-- Section 1: Intro -->
+        <div id="intro" class="section-content active">
+            <h2>HTML क्या है?</h2>
+            <p>HTML का पूरा नाम <b>HyperText Markup Language</b> है। इसका इस्तेमाल वेब पेजों और वेबसाइट्स के स्ट्रक्चर (ढांचे) को तैयार करने के लिए किया जाता है।</p>
+            <p>यह दुनिया की सबसे आसान और पहली भाषा है जो हर वेब डेवलपर सीखता है।</p>
+        </div>
+
+        <!-- Section 2: Headings -->
+        <div id="headings" class="section-content">
+            <h2>Headings और Paragraphs</h2>
+            <p>HTML में किसी भी हेडिंग को दिखाने के लिए <b>&lt;h1&gt;</b> से लेकर <b>&lt;h6&gt;</b> टैग का इस्तेमाल किया जाता है। पैराग्राफ के लिए <b>&lt;p&gt;</b> टैग होता है।</p>
+            <div class="code-box">
+                &lt;h1&gt;यह सबसे बड़ी हेडिंग है&lt;/h1&gt;<br>
+                &lt;p&gt;यह एक साधारण पैराग्राफ है।&lt;/p&gt;
+            </div>
+        </div>
+
+        <!-- Section 3: Live Editor -->
+        <div id="editor" class="section-content">
+            <h2>Live HTML Editor</h2>
+            <p>यहाँ आप अपना खुद का HTML कोड लिखकर उसका रिजल्ट तुरंत देख सकते हैं:</p>
+            <textarea id="htmlCode">&lt;h2 style="color: blue;"&gt;Hello World!&lt;/h2&gt;
+&lt;p&gt;यह मेरा पहला कोडिंग ऐप है।&lt;/p&gt;</textarea>
+            <button class="run-btn" onclick="runCode()">▶ Run Code</button>
+            <iframe id="outputFrame"></iframe>
+        </div>
+
+        <!-- Section 4: Quiz -->
+        <div id="quiz" class="section-content">
+            <h2>HTML Mini Quiz</h2>
+            <div class="quiz-question">Q1. HTML का पूरा नाम क्या है?</div>
+            <div class="quiz-options">
+                <label><input type="radio" name="q1" value="wrong"> Hyper Transfer Markup Language</label>
+                <label><input type="radio" name="q1" value="correct" id="q1Correct"> HyperText Markup Language</label>
+                <label><input type="radio" name="q1" value="wrong"> High Tech Modern Language</label>
+            </div>
+            <button class="run-btn" onclick="checkQuiz()" style="margin-top: 15px;">Submit Answer</button>
+            <div id="quizResult" class="quiz-result"></div>
+        </div>
+    </main>
+
+    <script>
+        // सेक्शन बदलने का फंक्शन
+        function showSection(sectionId, element) {
+            // सारे सेक्शन्स छुपाएं
+            const sections = document.querySelectorAll('.section-content');
+            sections.forEach(sec => sec.classList.remove('active'));
+
+            // क्लिक किए गए सेक्शन को दिखाएं
+            document.getElementById(sectionId).classList.add('active');
+
+            // मेनू का एक्टिव क्लास बदलें
+            const menuItems = document.querySelectorAll('.menu li');
+            menuItems.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // लाइव एडिटर रन करने का फंक्शन
+        function runCode() {
+            const code = document.getElementById("htmlCode").value;
+            const output = document.getElementById("outputFrame").contentWindow.document;
+            output.open();
+            output.write(code);
+            output.close();
+        }
+
+        // क्विज़ चेक करने का फंक्शन
+        function checkQuiz() {
+            const resultBox = document.getElementById("quizResult");
+            resultBox.style.display = "block";
+            
+            if(document.getElementById("q1Correct").checked) {
+                resultBox.style.background = "#d4edda";
+                resultBox.style.color = "#155724";
+                resultBox.innerHTML = "🎉 बिल्कुल सही जवाब!";
+            } else {
+                resultBox.style.background = "#f8d7da";
+                resultBox.style.color = "#721c24";
+                resultBox.innerHTML = "❌ गलत जवाब! सही उत्तर 'HyperText Markup Language' है।";
+            }
+        }
+
+        // पेज लोड होते ही एडिटर रन करें
+        window.onload = runCode;
+    </script>
+</body>
+</html>
